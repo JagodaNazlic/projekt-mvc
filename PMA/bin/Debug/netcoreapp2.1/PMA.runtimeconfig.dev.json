@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Jagoda\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Jagoda\\.nuget\\packages"
+    ]
+  }
+}

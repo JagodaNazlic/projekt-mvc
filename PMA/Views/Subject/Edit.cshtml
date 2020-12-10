@@ -1,0 +1,86 @@
+﻿@model PMA.Models.ViewModel.SubjectViewModel;
+@using PMA.Extensions;
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    document.ready(function () {
+        var MakeDDL = $("#Make");
+        var ModelDDL = $("#Model");
+        ModelDDL.prop('disabled', true);
+        MakeDDL.change(function () {
+            if ($(this).val() == "0") {
+                ModelDDL.prop('disabled', true);
+                ModelDDL.val("0");
+            }
+            else {
+
+                $.ajax({
+                    url: "/api/models/" + $(this).val(),
+                    method: "get",
+                    success: function () {
+                        ModelDDL.prop('disabled', false);
+                        ModelDDL.empty();
+                        ModelDDL.append($('<option/>', { value: '0', text: '--Select Model--' }))
+                        $(data).each(function (index, item) {
+                            ModelDDL.append($('<option/>', { value: item.Id, text:item.name }))
+                        });
+                    }
+                })
+            }
+        })
+
+    })
+</script>
+
+<br />
+<h2 class="text-info">Add Subject</h2>
+<form method="post" enctype="multipart/form-data" asp-action="Create">
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Makes"></label>
+        </div>
+        <div class="col-4">
+            <select asp-for="Subject.MakeID" asp-items="Model.Makes.ToSelectListItem()" class="form-control" id="Make"></select>
+        </div>
+        <div class="col-auto">
+            <label asp-for="Subject.ImagePath"></label>
+        </div>
+        <div class="col-4">
+            <input type="file" name="files" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Models"></label>
+        </div>
+        <div class="col-4">
+            <select asp-for="Subject.ModelID" asp-items="Model.Models.ToSelectListItem()" class="form-control" id="Model"></select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Subject.Description"></label>
+        </div>
+        <div class="col-4">
+            <textarea asp-for="Subject.Description" class="form-control"></textarea>
+            <span asp-validation-for="Subject.Description" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Subject.Author"></label>
+        </div>
+        <div class="col-4">
+            <input asp-for="Subject.Author" class="form-control" />
+            <span asp-validation-for="Subject.Author" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Create" />
+        <a asp-action="Index" class="btn btn-success">Back</a>
+    </div>
+
+</form>

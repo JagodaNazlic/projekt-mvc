@@ -1,0 +1,57 @@
+﻿@model IEnumerable<PMA.Models.Subject>
+@using PMA.Helpers;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">Subjects</h2>
+    </div>
+    @if(User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+    {
+    <div class="col-6 text-right">
+        <a class="btn btn-info" asp-action="Create"> Add new subject </a>
+    </div>
+     }
+    <br />
+    <div class="col-12">
+        <table class="table table-striped border ">
+            <tr class="table-info">
+                <th>Subject photo</th>
+                <th>Subject description</th>
+                <th>Subject author</th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td><img src="@Html.DisplayFor(m => item.ImagePath)" width="150px" height="100px" /></td>
+            <td>
+                <b>@Html.DisplayFor(m => item.Make.Name)</b><br />
+                <b>@Html.DisplayFor(m => item.Model.Name)</b><br />
+            </td>
+            <td>
+                <b>Author: </b>@Html.DisplayFor(m => item.Author)<br />
+            </td>
+            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+            {
+                <partial name="_TableButtonPartial" model="item.Id" />
+            }
+            else { 
+                <td class="text-right">
+                    <div class="btn-group" role="group">
+                        <a type="button" class="brn btn-primary" href="@Url.Action("Edit/"+item.Id)"><i class="far fa-edit"></i></a>
+                    
+                    </div>
+                </td>
+            }
+        </tr>
+            }
+
+        </table>
+    </div>
+</div>
